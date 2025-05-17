@@ -22,15 +22,10 @@ public class Principal {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long pid;
 
-    @NotBlank(message = "First name is required")
-    @Size(max = 50, message = "First name must be at most 50 characters")
-    @Column(name = "Fname")
-    private String fname;
-
-    @NotBlank(message = "Last name is required")
-    @Size(max = 50, message = "Last name must be at most 50 characters")
-    @Column(name = "Lname")
-    private String lname;
+    @NotBlank(message = "Name is required")
+    @Size(max = 50, message = "Name must be at most 50 characters")
+    @Column(name = "name")
+    private String name;
 
     @Past(message = "Date of birth must be in the past")
     @Column(name = "Dob")

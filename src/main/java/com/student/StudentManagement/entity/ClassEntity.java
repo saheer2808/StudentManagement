@@ -23,14 +23,9 @@ public class ClassEntity {
     private Long classId;
 
     @NotBlank(message = "Class name is required")
-    @Size(max = 50, message = "Class name must be at most 50 characters")
+    @Size(max = 5, message = "Class name must be at most 2 characters")
     @Column(name = "ClassName")
     private String className;
-
-    @NotBlank(message = "Section is required")
-    @Size(max = 10, message = "Section must be at most 10 characters")
-    @Column(name = "Section")
-    private String section;
 
     @ManyToOne
     @JoinColumn(name = "TeacherId")

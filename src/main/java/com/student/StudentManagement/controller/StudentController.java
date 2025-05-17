@@ -1,5 +1,6 @@
 package com.student.StudentManagement.controller;
 
+import com.student.StudentManagement.dto.StudentDto;
 import com.student.StudentManagement.entity.ClassEntity;
 import com.student.StudentManagement.entity.Student;
 import com.student.StudentManagement.entity.Teacher;
@@ -20,21 +21,10 @@ public class StudentController {
 
     @Autowired
     private StudentService studentService;
-
-    @Autowired
-    private ClassService classService;
-
-    @Autowired
-    private TeacherService teacherService;
-    
-//    @Autowired
-//    public StudentController(StudentService studentService) {
-//        this.studentService = studentService;
-//    }
     
     // Create a new student
     @PostMapping
-    public ResponseEntity<Student> createStudent(@Valid @RequestBody Student student) {
+    public ResponseEntity<Student> createStudent(@Valid @RequestBody StudentDto student) {
         Student createdStudent = studentService.createStudent(student);
         return new ResponseEntity<>(createdStudent, HttpStatus.CREATED);
     }
@@ -54,9 +44,9 @@ public class StudentController {
     }
     
     // Get students by class
-    @GetMapping("/class/{className}")
-    public ResponseEntity<List<Student>> getStudentsByClass(@PathVariable String className) {
-        List<Student> students = studentService.getStudentsByClass(className);
+    @GetMapping("/class/{classId}")
+    public ResponseEntity<List<Student>> getStudentsByClass(@PathVariable Long classId) {
+        List<Student> students = studentService.getStudentsByClassId(classId);
         return new ResponseEntity<>(students, HttpStatus.OK);
     }
     
@@ -72,19 +62,5 @@ public class StudentController {
     public ResponseEntity<Void> deleteStudent(@PathVariable Long id) {
         studentService.deleteStudent(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
-
-    // --------
-
-    @PostMapping("/class")
-    public ResponseEntity<ClassEntity> createClass(@Valid @RequestBody ClassEntity classe) {
-        ClassEntity createdClass = classService.createClass(classe);
-        return new ResponseEntity<>(createdClass, HttpStatus.CREATED);
-    }
-
-    @PostMapping("/teacher")
-    public ResponseEntity<Teacher> createTeacher(@Valid @RequestBody Teacher teacher) {
-        Teacher createdTeacher = teacherService.createTeacher(teacher);
-        return new ResponseEntity<>(createdTeacher, HttpStatus.CREATED);
     }
 }

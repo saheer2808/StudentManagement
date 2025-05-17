@@ -25,11 +25,8 @@ public class Student {
     @Column(name = "Roll_no")
     private Integer rollNo;
 
-    @Column(name = "Fname")
-    private String fname;
-
-    @Column(name = "Lname")
-    private String lname;
+    @Column(name = "name")
+    private String name;
 
     @Column(name = "Dob")
     @NotNull(message = "Date of birth is required")
@@ -44,9 +41,7 @@ public class Student {
     @Column(name = "Address")
     private String address;
 
-    @ManyToOne
-    @JoinColumn(name = "ClassId")
-    private ClassEntity classEntity;
+    private Long classId;
     
     @Pattern(regexp = "^[0-9]{10}$", message = "Phone number should be 10 digits")
     private String phoneNumber;

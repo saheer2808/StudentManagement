@@ -1,6 +1,8 @@
 package com.student.StudentManagement.service;
 
 import com.student.StudentManagement.dao.StudentRepository;
+import com.student.StudentManagement.dto.StudentDto;
+import com.student.StudentManagement.entity.ClassEntity;
 import com.student.StudentManagement.entity.Student;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,17 +13,32 @@ import java.util.List;
 
 @Service
 public class StudentService {
-    
-    private final StudentRepository studentRepository;
-    
+
     @Autowired
-    public StudentService(StudentRepository studentRepository) {
-        this.studentRepository = studentRepository;
-    }
-    
+    private StudentRepository studentRepository;
+
+    @Autowired
+    private ClassService classService;
+
     // Create a new student
-    public Student createStudent(Student student) {
-        return studentRepository.save(student);
+    public Student createStudent(StudentDto student) {
+
+        Student std = new Student();
+
+        std.setRollNo(student.getRollNo());
+        std.setName(student.getName());
+        std.setDob(student.getDob());
+        std.setAddress(student.getAddress());
+        std.setEmail(student.getEmail());
+        std.setPhoneNumber(student.getPhoneNumber());
+
+        var classExists = classService.isClassExists(student.getClassId());
+        if (!classExists) {
+            throw new EntityNotFoundException("Class not found with id: " + student.getClassId());
+        }
+        std.setClassId(student.getClassId());
+
+        return studentRepository.save(std);
     }
     
     // Get all students
@@ -36,22 +53,20 @@ public class StudentService {
     }
     
     // Get students by class
-    public List<Student> getStudentsByClass(String className) {
-        return new ArrayList<>();
-//        return studentRepository.findByClassName(className);
+    public List<Student> getStudentsByClassId(Long classId) {
+        return studentRepository.findByClassId(classId);
     }
     
     // Update student
     public Student updateStudent(Long id, Student studentDetails) {
+
         Student student = getStudentById(id);
-        
-//        student.setFirstName(studentDetails.getFirstName());
-//        student.setLastName(studentDetails.getLastName());
-//        student.setDateOfBirth(studentDetails.getDateOfBirth());
-//        student.setEmail(studentDetails.getEmail());
-//        student.setClassName(studentDetails.getClassName());
-//        student.setAddress(studentDetails.getAddress());
-//        student.setPhoneNumber(studentDetails.getPhoneNumber());
+        student.setName(studentDetails.getName());
+        student.setDob(studentDetails.getDob());
+        student.setEmail(studentDetails.getEmail());
+        student.setClassId(studentDetails.getClassId());
+        student.setAddress(studentDetails.getAddress());
+        student.setPhoneNumber(studentDetails.getPhoneNumber());
         
         return studentRepository.save(student);
     }
